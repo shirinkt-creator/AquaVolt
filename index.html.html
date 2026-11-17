@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071d3b">
+<title>AquaVolt | Wastewater-to-Energy Monitor</title>
+<style>
+:root{--navy:#071d3b;--blue:#0878c9;--cyan:#42d5e8;--green:#27b56c;--lime:#a5e65a;--ink:#132b49;--muted:#6c7e94;--line:#e3edf5;--bg:#f3f8fc;--white:#fff;--shadow:0 12px 32px rgba(18,55,91,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:linear-gradient(115deg,#061a36 0%,#073d68 62%,#087b8d 100%);color:white;padding:25px max(5vw,22px) 30px;position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:340px;height:340px;border:1px solid #ffffff20;border-radius:50%;right:8%;top:-230px;box-shadow:0 0 0 35px #ffffff09,0 0 0 75px #ffffff07}
+.top{max-width:1250px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:20px;position:relative;z-index:1}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(145deg,#2dd6e7,#39b967);display:grid;place-items:center;color:#052d47;font-size:27px;font-weight:900;box-shadow:0 8px 22px #00c5a333}
+.brand-name{font-size:30px;font-weight:850;letter-spacing:-1.4px}.brand-name span{color:#82e35c}
+.tag{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#b9e6f2;margin-top:2px}
+.status{border:1px solid #ffffff40;background:#ffffff12;border-radius:30px;padding:9px 14px;font-size:12px;color:#d8f8e8;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;background:#6df2a0;border-radius:50%;box-shadow:0 0 0 4px #6df2a022}
+.hero{max-width:1250px;margin:30px auto 0;position:relative;z-index:1}.eyebrow{color:#79e5dc;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:clamp(27px,4vw,43px);line-height:1.1;max-width:720px;margin:9px 0 10px;letter-spacing:-1.5px}.hero p{color:#c6dce9;max-width:720px;line-height:1.6;margin:0;font-size:14px}
+main{max-width:1250px;margin:26px auto;padding:0 22px 50px}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:28px 0 14px}.section-head h2{font-size:18px;margin:0;letter-spacing:-.4px}.section-head p{font-size:12px;color:var(--muted);margin:4px 0 0}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card{background:var(--white);border:1px solid var(--line);border-radius:17px;padding:18px;box-shadow:var(--shadow)}
+.metric{min-height:135px;position:relative;overflow:hidden}.metric:after{content:"";position:absolute;width:95px;height:95px;border-radius:50%;right:-35px;bottom:-43px;background:#e9f7fb}
+.metric-label{font-size:12px;color:var(--muted);font-weight:650}.metric-value{font-size:29px;font-weight:850;letter-spacing:-1px;margin:12px 0 4px;color:var(--navy)}.metric-sub{font-size:11px;color:#8292a5}.metric-icon{position:absolute;right:15px;top:14px;font-size:21px}
+.two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:16px}.card h3{font-size:15px;margin:0 0 5px}.sub{font-size:11px;color:var(--muted);margin:0 0 17px;line-height:1.5}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.field label{display:block;font-size:11px;font-weight:750;color:#425a74;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid #d9e5ef;border-radius:10px;padding:11px 12px;background:#fbfdff;color:var(--ink);font:inherit;font-size:13px;outline:none}.field input:focus,.field select:focus{border-color:#24a6d3;box-shadow:0 0 0 3px #24a6d31b}.unit{font-size:10px;color:#8292a5;margin-top:5px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:17px}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:750;font-size:12px;cursor:pointer;transition:.2s}.btn-primary{background:linear-gradient(100deg,#087bc6,#079c9c);color:white;box-shadow:0 6px 14px #087bc633}.btn-primary:hover{transform:translateY(-1px)}.btn-soft{background:#edf5fa;color:#31516d}.btn-danger{background:#fff0ef;color:#b44b42}
+.result{margin-top:15px;background:linear-gradient(120deg,#eaf9ff,#edfff4);border:1px solid #ccefe7;border-radius:13px;padding:14px;display:none}.result strong{font-size:23px;color:#087b74}.result small{display:block;color:#567287;line-height:1.5;margin-top:4px}
+.sensor-list{display:grid;grid-template-columns:1fr 1fr;gap:10px}.sensor{background:#f7fafc;border:1px solid #e8eff5;border-radius:12px;padding:12px}.sensor-top{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#5b7188}.sensor-value{font-size:19px;font-weight:800;margin-top:7px}.pill{font-size:9px;font-weight:800;border-radius:20px;padding:4px 7px;background:#e3f8ed;color:#18844e}.pill.warn{background:#fff4dc;color:#a36a0a}.sensor input{width:100%;margin-top:8px;accent-color:#0896a8}
+.chart-card{margin-top:16px}.chart-head{display:flex;justify-content:space-between;align-items:start;gap:10px}.chart-wrap{height:220px;position:relative;margin-top:12px}.chart-wrap canvas{width:100%;height:100%}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:11px;min-width:580px}th{text-align:left;color:#71849a;font-weight:750;background:#f7fafc;padding:11px}td{padding:12px 11px;border-top:1px solid #edf2f6;color:#34506c}td strong{color:#0c765f}
+.insight{display:flex;gap:12px;padding:13px;border-radius:12px;background:#f0f8ff;margin-top:10px}.insight-icon{font-size:20px}.insight b{display:block;font-size:12px}.insight span{font-size:11px;color:#6b7e91;line-height:1.5}
+.note{font-size:10px;color:#75879a;line-height:1.6;margin-top:13px;padding:11px;background:#f8fafc;border-radius:10px}
+footer{text-align:center;padding:20px;color:#8191a4;font-size:11px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}.two-col{grid-template-columns:1fr}}
+@media(max-width:560px){header{padding:20px 17px 25px}.top{align-items:flex-start}.brand-name{font-size:25px}.status{font-size:0;padding:10px}.hero{margin-top:25px}main{padding:0 14px 35px}.grid{gap:9px}.card{padding:14px}.metric-value{font-size:24px}.form-grid{grid-template-columns:1fr}.sensor-list{gap:7px}.section-head{align-items:start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header>
+ <div class="top">
+  <div class="brand"><div class="logo">ϟ</div><div><div class="brand-name">Aqua<span>Volt</span></div><div class="tag">Clean water • Green energy</div></div></div>
+  <div class="status"><span class="dot"></span> SYSTEM MONITOR · DEMO MODE</div>
+ </div>
+ <div class="hero"><div class="eyebrow">AI-powered wastewater-to-energy management</div><h1>Turn wastewater data into clean energy insights.</h1><p>Estimate electricity generation from wastewater characteristics, monitor water-quality indicators and keep a running record of your plant's performance.</p></div>
+</header>
+<main>
+ <div class="section-head"><div><h2>Plant performance overview</h2><p>Illustrative 7-day sample dataset · save your own readings to extend it</p></div><div style="font-size:11px;color:#7b8da0" id="today"></div></div>
+ <div class="grid">
+  <div class="card metric"><div class="metric-icon">⚡</div><div class="metric-label">Estimated daily electricity</div><div class="metric-value" id="dailyKwh">— <small style="font-size:13px">kWh</small></div><div class="metric-sub">Net energy after plant-use allowance</div></div>
+  <div class="card metric"><div class="metric-icon">♻️</div><div class="metric-label">Cumulative energy logged</div><div class="metric-value" id="totalKwh">0 <small style="font-size:13px">kWh</small></div><div class="metric-sub">Sum of saved daily estimates</div></div>
+  <div class="card metric"><div class="metric-icon">💧</div><div class="metric-label">Wastewater processed</div><div class="metric-value" id="totalWater">0 <small style="font-size:13px">m³</small></div><div class="metric-sub">Total volume in saved records</div></div>
+  <div class="card metric"><div class="metric-icon">🌱</div><div class="metric-label">Estimated CO₂ avoided</div><div class="metric-value" id="co2">0 <small style="font-size:13px">kg</small></div><div class="metric-sub">Illustrative grid factor: 0.4 kg CO₂/kWh</div></div>
+ </div>
+ <div class="section-head"><div><h2>Energy generation calculator</h2><p>Enter plant measurements to estimate recoverable electricity</p></div></div>
+ <div class="two-col">
+  <section class="card">
+   <h3>Wastewater & process inputs</h3><p class="sub">Use laboratory readings or sample values. The estimate updates when you calculate.</p>
+   <div class="form-grid">
+    <div class="field"><label for="volume">Wastewater treated per day</label><input id="volume" type="number" min="0" step="any" value="100"><div class="unit">m³/day</div></div>
+    <div class="field"><label for="cod">Influent COD concentration</label><input id="cod" type="number" min="0" step="any" value="500"><div class="unit">mg/L</div></div>
+    <div class="field"><label for="removal">COD removal efficiency</label><input id="removal" type="number" min="0" max="100" step="any" value="75"><div class="unit">%</div></div>
+    <div class="field"><label for="efficiency">Generator electrical efficiency</label><input id="efficiency" type="number" min="1" max="100" step="any" value="35"><div class="unit">%</div></div>
+    <div class="field"><label for="methane">Methane yield</label><input id="methane" type="number" min="0" step="any" value="0.35"><div class="unit">m³ CH₄ per kg COD removed</div></div>
+    <div class="field"><label for="parasitic">Plant energy consumption</label><input id="parasitic" type="number" min="0" max="100" step="any" value="8"><div class="unit">% of gross generated electricity</div></div>
+   </div>
+   <div class="actions"><button class="btn btn-primary" onclick="calculate()">Calculate electricity</button><button class="btn btn-soft" onclick="saveRecord()">Save daily record</button><button class="btn btn-soft" onclick="resetInputs()">Reset values</button></div>
+   <div class="result" id="result"><strong id="resultValue">0 kWh/day</strong><small id="formulaText"></small></div>
+   <div class="note"><b>Calculation model:</b> COD removed (kg/day) × methane yield × 9.94 kWh/m³ CH₄ × generator efficiency. Net electricity subtracts the plant-use percentage. This is an educational estimate; actual output depends on wastewater biodegradability, digester performance, gas losses and equipment.</div>
+  </section>
+  <section class="card">
+   <h3>Sensor monitoring</h3><p class="sub">Enter current sensor readings. These indicators provide a simple screening view, not a certified water-safety assessment.</p>
+   <div class="sensor-list">
+    <div class="sensor"><div class="sensor-top"><span>💧 pH level</span><span class="pill" id="phStatus">In range</span></div><div class="sensor-value"><span id="phOut">7.0</span></div><input id="ph" type="range" min="0" max="14" step=".1" value="7" oninput="updateSensors()"></div>
+    <div class="sensor"><div class="sensor-top"><span>🌡 Temperature</span><span class="pill" id="tempStatus">In range</span></div><div class="sensor-value"><span id="tempOut">35</span> °C</div><input id="temp" type="range" min="0" max="60" value="35" oninput="updateSensors()"></div>
+    <div class="sensor"><div class="sensor-top"><span>🫧 Turbidity</span><span class="pill" id="turbStatus">Monitor</span></div><div class="sensor-value"><span id="turbOut">25</span> NTU</div><input id="turb" type="range" min="0" max="500" value="25" oninput="updateSensors()"></div>
+    <div class="sensor"><div class="sensor-top"><span>⚗ Conductivity</span><span class="pill" id="condStatus">Monitor</span></div><div class="sensor-value"><span id="condOut">900</span> µS/cm</div><input id="cond" type="range" min="0" max="5000" step="10" value="900" oninput="updateSensors()"></div>
+    <div class="sensor"><div class="sensor-top"><span>🧪 Dissolved oxygen</span><span class="pill" id="doStatus">Monitor</span></div><div class="sensor-value"><span id="doOut">2.0</span> mg/L</div><input id="do" type="range" min="0" max="14" step=".1" value="2" oninput="updateSensors()"></div>
+    <div class="sensor"><div class="sensor-top"><span>🧠 Sensor summary</span><span class="pill" id="overallStatus">Review</span></div><div class="sensor-value" style="font-size:15px" id="sensorSummary">Readings entered</div><div class="unit">Rule-based indicator check</div></div>
+   </div>
+   <div class="insight"><div class="insight-icon">💡</div><div><b>Smart insight</b><span id="insightText">Enter readings and calculate electricity to see a process insight.</span></div></div>
+  </section>
+ </div>
+ <section class="card chart-card">
+  <div class="chart-head"><div><h3>Energy generation trend</h3><p class="sub" style="margin:4px 0 0">Daily net electricity from saved records</p></div><button class="btn btn-soft" onclick="downloadCSV()">Export CSV ↓</button></div>
+  <div class="chart-wrap"><canvas id="chart"></canvas></div>
+ </section>
+ <div class="section-head"><div><h2>Generation history</h2><p>Seven-day simulated baseline plus any estimates you save</p></div><button class="btn btn-danger" onclick="clearRecords()">Clear history</button></div>
+ <section class="card"><div class="table-wrap"><table><thead><tr><th>Date & time</th><th>Wastewater (m³/day)</th><th>COD removed (kg/day)</th><th>Net electricity (kWh/day)</th></tr></thead><tbody id="history"><tr><td colspan="4" style="text-align:center;color:#8292a5">No records yet. Calculate and save your first entry.</td></tr></tbody></table></div></section>
+ <div class="note" style="margin-top:12px"><b>About the sample data:</b> The initial seven-day history is simulated demonstration data, not collected from a real treatment plant. Use the calculator to add new entries; use “Clear history” to remove the sample baseline and saved records.</div>
+  <footer>AquaVolt · Student project prototype · Estimates are illustrative and are not a substitute for plant instrumentation or engineering validation.</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let latest=null;
+let records=[];
+try{records=JSON.parse(localStorage.getItem('aquavolt_records')||'[]')}catch(e){records=[]}
+
+// Seven days of illustrative plant data; simulated, not real plant readings.
+function buildDemoRecords(){
+ const samples=[[92,470,73,34,.34,9],[105,510,76,35,.35,8],[98,495,74,34,.35,8],[112,530,78,36,.36,9],[101,485,75,35,.34,8],[108,520,77,35,.35,8],[100,500,75,35,.35,8]];
+ return samples.map((a,i)=>{
+  const [volume,cod,removal,efficiency,methaneYield,parasitic]=a;
+  const codRemoved=volume*cod*.001*(removal/100),methane=codRemoved*methaneYield;
+  const gross=methane*9.94*(efficiency/100),net=gross*(1-parasitic/100);
+  const date=new Date();date.setDate(date.getDate()-(6-i));date.setHours(9,0,0,0);
+  return {volume,codRemoved,methane,gross,net,stamp:date.toISOString(),demo:true};
+ });
+}
+if(!Array.isArray(records)||records.length===0){
+ records=buildDemoRecords();
+ try{localStorage.setItem('aquavolt_records',JSON.stringify(records))}catch(e){}
+}
+function val(id){return Number($(id).value)}
+function fmt(n,d=1){return Number(n).toLocaleString(undefined,{maximumFractionDigits:d})}
+function calculate(){
+ const v=val('volume'),cod=val('cod'),r=val('removal'),eff=val('efficiency'),my=val('methane'),p=val('parasitic');
+ if([v,cod,r,eff,my,p].some(x=>!Number.isFinite(x)||x<0)||r>100||eff>100||p>100||eff===0){alert('Please enter valid non-negative values. Percentages must be 0–100 and generator efficiency must be above 0.');return}
+ const removed=v*cod*.001*(r/100);
+ const methane=removed*my;
+ const gross=methane*9.94*(eff/100);
+ const net=gross*(1-p/100);
+ latest={volume:v,codRemoved:removed,methane,gross,net,stamp:new Date().toISOString()};
+ $('result').style.display='block';$('resultValue').textContent=fmt(net,2)+' kWh/day';
+ $('formulaText').textContent=`${fmt(removed,2)} kg COD removed → ${fmt(methane,2)} m³ methane → ${fmt(gross,2)} kWh gross electricity → ${fmt(net,2)} kWh net electricity.`;
+ $('dailyKwh').innerHTML=fmt(net,1)+' <small style="font-size:13px">kWh</small>';
+ $('insightText').textContent=net>0?`At these inputs, the system estimates ${fmt(net,1)} kWh/day net electricity. Check the sensor indicators and compare measured plant output with this estimate.`:'The current inputs estimate no recoverable net electricity. Review COD concentration, treatment volume and process assumptions.';
+}
+function saveRecord(){
+ if(!latest)calculate();if(!latest)return;
+ records.unshift({...latest,stamp:new Date().toISOString()});
+ localStorage.setItem('aquavolt_records',JSON.stringify(records));render();alert('Daily estimate saved on this device.');
+}
+function resetInputs(){[['volume',100],['cod',500],['removal',75],['efficiency',35],['methane',.35],['parasitic',8]].forEach(([id,v])=>$(id).value=v);$('result').style.display='none';latest=null;calculate()}
+function updateSensors(){
+ const specs=[['ph','phOut','phStatus',x=>x>=6.5&&x<=8.5,'In range','Check pH'],['temp','tempOut','tempStatus',x=>x>=30&&x<=38,'In range','Review temperature'],['turb','turbOut','turbStatus',x=>x<=50,'Low / moderate','High turbidity'],['cond','condOut','condStatus',x=>x<=2500,'Typical range','High conductivity'],['do','doOut','doStatus',x=>x<=2.5,'Anaerobic range','Higher DO']];
+ let flags=[];
+ specs.forEach(([id,out,status,ok,good,bad])=>{let x=val(id);$(out).textContent=fmt(x,1);let pass=ok(x);$(status).textContent=pass?good:bad;$(status).className='pill'+(pass?'':' warn');if(!pass)flags.push(bad)});
+ $('sensorSummary').textContent=flags.length?flags.length+' indicator(s) to review':'No rule-based flags';
+ $('overallStatus').textContent=flags.length?'Review':'Within guide';$('overallStatus').className='pill'+(flags.length?' warn':'');
+ $('insightText').textContent=flags.length?'Review: '+flags.join(', ')+'. These simple thresholds are indicative only and should be adapted to the treatment process.':'Current readings are within the prototype guide ranges. Continue monitoring trends and verify with laboratory tests.';
+}
+function render(){
+ let sum=records.reduce((a,r)=>a+(r.net||0),0),water=records.reduce((a,r)=>a+(r.volume||0),0);
+ $('totalKwh').innerHTML=fmt(sum,1)+' <small style="font-size:13px">kWh</small>';$('totalWater').innerHTML=fmt(water,1)+' <small style="font-size:13px">m³</small>';$('co2').innerHTML=fmt(sum*.4,1)+' <small style="font-size:13px">kg</small>';
+ $('history').innerHTML=records.length?records.slice(0,30).map(r=>`<tr><td>${new Date(r.stamp).toLocaleString()}</td><td>${fmt(r.volume,2)}</td><td>${fmt(r.codRemoved,2)}</td><td><strong>${fmt(r.net,2)} kWh</strong></td></tr>`).join(''):'<tr><td colspan="4" style="text-align:center;color:#8292a5">No records yet. Calculate and save your first entry.</td></tr>';
+ drawChart();
+}
+function drawChart(){
+ const c=$('chart'),ctx=c.getContext('2d'),rect=c.getBoundingClientRect(),dpr=window.devicePixelRatio||1;
+ c.width=rect.width*dpr;c.height=rect.height*dpr;ctx.scale(dpr,dpr);let w=rect.width,h=rect.height;
+ ctx.clearRect(0,0,w,h);let data=records.slice(0,10).reverse().map(r=>r.net);if(!data.length)data=[0];
+ let max=Math.max(10,...data)*1.2,left=42,right=12,top=12,bottom=30,cw=w-left-right,ch=h-top-bottom;
+ ctx.font='10px system-ui';ctx.fillStyle='#8292a5';ctx.strokeStyle='#e9eff4';ctx.lineWidth=1;
+ for(let i=0;i<=4;i++){let y=top+ch*i/4;ctx.beginPath();ctx.moveTo(left,y);ctx.lineTo(w-right,y);ctx.stroke();ctx.fillText(fmt(max*(1-i/4),0),4,y+3)}
+ let pts=data.map((v,i)=>({x:left+(data.length===1?cw/2:i*cw/(data.length-1)),y:top+ch-(v/max)*ch}));
+ if(pts.length>1){ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.lineTo(pts[pts.length-1].x,top+ch);ctx.lineTo(pts[0].x,top+ch);ctx.closePath();let g=ctx.createLinearGradient(0,top,0,h);g.addColorStop(0,'rgba(19,169,169,.22)');g.addColorStop(1,'rgba(19,169,169,0)');ctx.fillStyle=g;ctx.fill()}
+ ctx.beginPath();pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle='#07999d';ctx.lineWidth=2.5;ctx.stroke();
+ pts.forEach((p,i)=>{ctx.beginPath();ctx.arc(p.x,p.y,3.5,0,Math.PI*2);ctx.fillStyle='#087bc6';ctx.fill();ctx.fillStyle='#8292a5';ctx.font='9px system-ui';ctx.textAlign='center';ctx.fillText('Day '+(i+1),p.x,h-8)});
+}
+function downloadCSV(){
+ let rows=[['Timestamp','Wastewater_m3_day','COD_removed_kg_day','Methane_m3_day','Gross_electricity_kWh_day','Net_electricity_kWh_day'],...records.map(r=>[r.stamp,r.volume,r.codRemoved,r.methane,r.gross,r.net])];
+ let csv=rows.map(row=>row.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(',')).join('\n');
+ let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='aquavolt-energy-records.csv';a.click();URL.revokeObjectURL(a.href);
+}
+function clearRecords(){if(confirm('Delete all saved AquaVolt records from this browser?')){records=[];localStorage.removeItem('aquavolt_records');render()}}
+$('today').textContent=new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+updateSensors();render();calculate();window.addEventListener('resize',drawChart);
+</script>
+</body></html>
